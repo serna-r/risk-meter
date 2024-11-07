@@ -1,0 +1,10 @@
+h1 {
+    border: 2px #eee solid;
+    color: brown;
+    text-align: center;
+    padding: 10px;
+}
+
+#main-div {
+    margin: 25px 50px 75px 100px;
+}

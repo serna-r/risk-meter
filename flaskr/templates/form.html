@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Risk-meter form</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <!-- Authentication practices -->
+        <h2>Authentication practices</h2>
+        <p>
+            {{ form.min_length.label }}<br>
+            {{ form.min_length(size=10) }}<br>
+            {% for error in form.min_length.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.min_mask.label }}<br>
+            {{ form.min_mask(size=10) }}<br>
+            {% for error in form.min_mask.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.extra_sec() }} {{ form.extra_sec.label }}</p>
+        <p>{{ form.two_factor() }} {{ form.two_factor.label }}</p>
+        <p>
+            {{ form.sign_in_method.label }}<br>
+            {{ form.sign_in_method(size=10) }}<br>
+            {% for error in form.sign_in_method.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <!-- Risk of data exposure -->
+        <h2>Risk of data exposure</h2>
+        <p>
+            {{ form.risk_data_exp.label }}<br>
+            {{ form.risk_data_exp(size=10) }}<br>
+        </p>
+
+        <!-- Risk appetite -->
+        <p>
+            {{ form.risk_appetite.label }}<br>
+            {{ form.risk_appetite(size=10) }}<br>
+            {% for error in form.risk_appetite.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <!-- Password -->
+        <h2>Sample password</h2>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
