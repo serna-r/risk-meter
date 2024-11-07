@@ -6,7 +6,7 @@ from wtforms import widgets
 data_list = ['Nickname', 'Name', 'Surname', 'birth date', 'gender', 'Profile photo', 'email', 'tlf', 'nacionality', 'location', 'address', 'Photos', 'Messages', 'subscription', 'purchases', 'money stored', 'key to other accounts', 'Sexual preferences']
 
 class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(html_tag='ol', prefix_label=False)
+    widget = widgets.ListWidget(html_tag='ul', prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
 class RiskForm(FlaskForm):
