@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Results {% endblock %}</h1>
+    
+    <!-- Dynamically generated radar plot -->
+    <h2>Risk of Data Exposure</h2>
+    {% if session.plot_filename %}
+        <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" class="image" width="25%" height="25%" alt="Radar Plot">
+    {% else %}
+        <p>No plot available.</p>
+    {% endif %}
+    
+    <!-- Display calculated risk scores in a table -->
+    <h2>Risk Scores by Dimension:</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Dimension</th>
+                <th>Normal Score</th>
+                <th>Weighted Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dimension, score in session.risk_scores.items() %}
+                <tr>
+                    <td><strong>{{ dimension }}</strong></td>
+                    <td>{{ score }}</td>
+                    <td>{{ session.risk_scores_weighted[dimension] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ totals[0] }}</th>
+                <th>{{ totals[1] }}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <!-- User Responses Section -->
+    <h2>User Responses</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Minimum Length</strong></td>
+                <td>{{ session.min_length }}</td>
+            </tr>
+            <tr>
+                <td><strong>Minimum Mask</strong></td>
+                <td>{{ session.min_mask }}</td>
+            </tr>
+            <tr>
+                <td><strong>Extra Security</strong></td>
+                <td>{{ 'Enabled' if session.extra_sec else 'Disabled' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Two Factor Authentication</strong></td>
+                <td>{{ 'Enabled' if session.two_factor else 'Disabled' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Risk of Data Exposure</strong></td>
+                <td>{{ session.risk_data_exp | join(', ') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Password Strength</strong></td>
+                <td>{{ session.password_strength }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Radar image for comparison -->
+    <h2>Radar plots for common service categories</h2>
+    <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" class="image" width="50%" height="50%"/>
+{% endblock %}

@@ -8,14 +8,14 @@
         <h2>Authentication practices</h2>
         <p>
             {{ form.min_length.label }}<br>
-            {{ form.min_length(size=10) }}<br>
+            {{ form.min_length(size=5) }}<br>
             {% for error in form.min_length.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.min_mask.label }}<br>
-            {{ form.min_mask(size=10) }}<br>
+            {{ form.min_mask }}<br>
             {% for error in form.min_mask.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -24,7 +24,7 @@
         <p>{{ form.two_factor() }} {{ form.two_factor.label }}</p>
         <p>
             {{ form.sign_in_method.label }}<br>
-            {{ form.sign_in_method(size=10) }}<br>
+            {{ form.sign_in_method }}<br>
             {% for error in form.sign_in_method.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -41,7 +41,7 @@
         <h2>Risk appetite</h2>
         <p>
             {{ form.risk_appetite.label }}<br>
-            {{ form.risk_appetite(size=10) }}<br>
+            {{ form.risk_appetite }}<br>
             {% for error in form.risk_appetite.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

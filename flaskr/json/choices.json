@@ -1,0 +1,6 @@
+{
+    "min_mask" : ["Choose one", "l", "ld", "lds", "luds"],
+    "sign_in_method" : ["Choose one","username", "e-mail", "telephone"],
+    "risk_data_exp" : ["Nickname", "Name", "Surname", "Birth date", "Gender", "Profile photo", "Email", "Telephone", "Nacionality", "Location", "Address", "Photos", "Messages", "Subscription", "Purchases", "Money stored", "Key to other accounts", "Sexual preferences"],
+    "risk_appetite" : ["Choose one", "1. Top security", "2. Good security", "3. More or less good security", "4. Standard security", "5. More or less bad security", "6. Bad security", "7. Very bad security"]
+}

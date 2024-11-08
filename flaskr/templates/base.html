@@ -14,16 +14,6 @@
             <a href="/">Home</a>
             <a href="/form">Form</a>
         </div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
         <div id="main-div">
         {% block content %}{% endblock %}
         </div>
