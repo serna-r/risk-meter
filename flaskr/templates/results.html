@@ -3,20 +3,140 @@
 {% block content %}
     <h1>{% block title %} Results {% endblock %}</h1>
     
-    <!-- Dynamically generated radar plot -->
-    <h2>Risk of Data Exposure</h2>
-    {% if session.plot_filename %}
-        <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" class="image" width="40%" height="40%" alt="Radar Plot">
-    {% else %}
-        <p>No plot available.</p>
-    {% endif %}
+    <!-- Image container for side-by-side display -->
+    <div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start;">
+        <div style="text-align: center;">
+            <h2>Risk of Data Exposure</h2>
+            <br>
+            <a href="#risk-scores">Scores table</a>
+            {% if session.plot_filename %}
+                <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" width="100%" height="auto" alt="Radar Plot">
+            {% else %}
+                <p>No plot available.</p>
+            {% endif %}
+        </div>
 
-    <!-- Radar image for comparison -->
-    <h2>Radar plots for common service categories</h2>
-    <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" class="image" width="50%" height="50%"/>
+        <div style="text-align: center;">
+            <h2>Radar plots for common service categories</h2>
+            <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" width="70%" height="auto" alt="Comparison Radar Plot">
+        </div>
+    </div>
 
-    <!-- Display calculated risk scores in a table -->
-    <h2>Risk Scores by Dimension:</h2>
+    <!-- User Responses Section -->
+    <h2>User Responses</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Minimum Length</strong></td>
+                <td>{{ session.min_length }}</td>
+            </tr>
+            <tr>
+                <td><strong>Minimum Mask</strong></td>
+                <td>{{ session.min_mask }}</td>
+            </tr>
+            <tr>
+                <td><strong>Extra Security</strong></td>
+                <td>{{ 'Implemented' if session.extra_sec else 'Not implemented' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Two Factor Authentication</strong></td>
+                <td>{{ 'Available' if session.two_factor else 'Not available' }}</td>
+            </tr>
+            <tr>
+                <td><strong>Risk of Data Exposure</strong></td>
+                <td>{{ session.risk_data_exp | join(', ') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Password Strength Score</strong></td>
+                <td>{{ session.password_strength['score'] }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Password Security Information -->
+    <h2>Password Security Information</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Password</strong></td>
+                <td>{{ session.password_strength['password'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Guesses</strong></td>
+                <td>{{ session.password_strength['guesses'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Guess Complexity (log10)</strong></td>
+                <td>{{ session.password_strength['guesses_log10'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Online Crack Time (100 attempts/hour)</strong></td>
+                <td>{{ session.password_strength['crack_times_display']['online_throttling_100_per_hour'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Offline Crack Time (10^4 attempts/second)</strong></td>
+                <td>{{ session.password_strength['crack_times_display']['offline_slow_hashing_1e4_per_second'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Offline Crack Time (10^10 attempts/second)</strong></td>
+                <td>{{ session.password_strength['crack_times_display']['offline_fast_hashing_1e10_per_second'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Feedback Warning</strong></td>
+                <td>{{ session.password_strength['feedback']['warning'] }}</td>
+            </tr>
+            <tr>
+                <td><strong>Suggestions</strong></td>
+                <td>{{ session.password_strength['feedback']['suggestions'] | join(', ') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Detailed Breakdown of Password Components -->
+    <h2>Password Component Analysis</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Pattern</th>
+                <th>Token</th>
+                <th>Pattern Details</th>
+                <th>Guesses</th>
+                <th>Guess Complexity (log10)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in session.password_strength['sequence'] %}
+                <tr>
+                    <td><strong>{{ component['pattern'] }}</strong></td>
+                    <td>{{ component['token'] }}</td>
+                    <td>
+                        {% if component['pattern'] == 'spatial' %}
+                            Graph: {{ component['graph'] }}, Turns: {{ component['turns'] }}, Shifted Count: {{ component['shifted_count'] }}
+                        {% elif component['pattern'] == 'dictionary' %}
+                            Dictionary: {{ component['dictionary_name'] }}, Word: {{ component['matched_word'] }}, Rank: {{ component['rank'] }}
+                        {% endif %}
+                    </td>
+                    <td>{{ component['guesses'] }}</td>
+                    <td>{{ component['guesses_log10'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Risk Scores Table -->
+    <h2 id="risk-scores">Risk Scores by Dimension:</h2>
     <table border="1">
         <thead>
             <tr>
@@ -37,15 +157,15 @@
         <tfoot>
             <tr>
                 <th>Total</th>
-                <!-- Apply classes to the footer cells -->
                 <th class="total {{ total_normal_color_class }}">{{ totals[0] }}</th>
                 <th class="total {{ total_weighted_color_class }}">{{ totals[1] }}</th>
             </tr>
-        </tfoot>        
+        </tfoot>
     </table>
+    <p><a href="#risk-scale">See Risk Scale Table</a></p>
 
     <!-- Risk Scale Table -->
-    <h2>Risk Scale</h2>
+    <h2 id="risk-scale">Risk Scale</h2>
     <table border="1">
         <thead>
             <tr>
@@ -81,44 +201,4 @@
         </tbody>
     </table>
 
-    <!-- User Responses Section -->
-    <h2>User Responses</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Response</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Minimum Length</strong></td>
-                <td>{{ session.min_length }}</td>
-            </tr>
-            <tr>
-                <td><strong>Minimum Mask</strong></td>
-                <td>{{ session.min_mask }}</td>
-            </tr>
-            <tr>
-                <td><strong>Extra Security</strong></td>
-                <td>{{ 'Enabled' if session.extra_sec else 'Disabled' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Two Factor Authentication</strong></td>
-                <td>{{ 'Enabled' if session.two_factor else 'Disabled' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Risk of Data Exposure</strong></td>
-                <td>{{ session.risk_data_exp | join(', ') }}</td>
-            </tr>
-            <tr>
-                <td><strong>Password Strength</strong></td>
-                <td>{{ session.password_strength }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Radar image for comparison -->
-    <h2>Radar plots for common service categories</h2>
-    <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" class="image" width="50%" height="50%"/>
 {% endblock %}

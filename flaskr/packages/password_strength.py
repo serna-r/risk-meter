@@ -7,4 +7,4 @@ def calculate_strength(password):
     results = zxcvbn(password)
 
     # Returm score
-    return results['score']
+    return results

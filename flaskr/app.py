@@ -23,7 +23,11 @@ def form():
         session['extra_sec'] = form.extra_sec.data
         session['two_factor'] = form.two_factor.data
         session['risk_data_exp'] = form.risk_data_exp.data
-        session['password_strength'] = calculate_strength(form.password.data)
+
+        # Get zxcvbn
+        password_strength = calculate_strength(form.password.data)
+        password_strength['calc_time'] = str(password_strength['calc_time'])  # Convert timedelta to string
+        session['password_strength'] = password_strength
         
         # Calculate the risk scores based on the selected elements
         risk_scores, risk_scores_weighted = calculate_risk(form.risk_data_exp.data, int(form.risk_appetite.data[0]))

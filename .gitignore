@@ -16,3 +16,6 @@ build/
 
 # Ignore own notes
 notes.txt
+
+# Ignore generated images
+/generated
