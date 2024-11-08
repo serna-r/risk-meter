@@ -79,6 +79,20 @@ def calculate_risk(selected_elements, risk_appetite):
 
     return risk_scores, risk_scores_weighted
 
+def get_risk_color_class(score):
+    if score < 30:
+        return "very-low"
+    elif score < 60:
+        return "low"
+    elif score < 90:
+        return "medium"
+    elif score < 120:
+        return "high"
+    elif score < 150:
+        return "very-high"
+    else:
+        return "death"
+
 def example():
     # Example usage
     selected_elements = ["Nickname", "Email", "Location", "Subscription"]

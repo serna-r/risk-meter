@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, sen
 from form import RiskForm
 from config import Config
 from packages.password_strength import calculate_strength
-from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions
+from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions, get_risk_color_class
 import os
 
 app = Flask(__name__)
@@ -54,11 +54,17 @@ def results():
     # Calculate totals
     totals = [sum(risk_scores.values()), sum(risk_scores_weighted.values())]
     
+    # Get color scales
+    total_normal_color_class = get_risk_color_class(totals[0])
+    total_weighted_color_class = get_risk_color_class(totals[1])
+
     return render_template(
         'results.html', 
-        risk_scores=risk_scores, 
+        risk_scores=risk_scores,
+        risk_scores_weighted=risk_scores_weighted,
+        total_normal_color_class=total_normal_color_class,
+        total_weighted_color_class=total_weighted_color_class,
         plot_filename=plot_filename, 
-        risk_scores_weighted=risk_scores_weighted, 
         totals=totals
     )
 

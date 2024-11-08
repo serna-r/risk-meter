@@ -6,11 +6,15 @@
     <!-- Dynamically generated radar plot -->
     <h2>Risk of Data Exposure</h2>
     {% if session.plot_filename %}
-        <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" class="image" width="25%" height="25%" alt="Radar Plot">
+        <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" class="image" width="40%" height="40%" alt="Radar Plot">
     {% else %}
         <p>No plot available.</p>
     {% endif %}
-    
+
+    <!-- Radar image for comparison -->
+    <h2>Radar plots for common service categories</h2>
+    <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" class="image" width="50%" height="50%"/>
+
     <!-- Display calculated risk scores in a table -->
     <h2>Risk Scores by Dimension:</h2>
     <table border="1">
@@ -22,21 +26,59 @@
             </tr>
         </thead>
         <tbody>
-            {% for dimension, score in session.risk_scores.items() %}
+            {% for dimension, score in risk_scores.items() %}
                 <tr>
                     <td><strong>{{ dimension }}</strong></td>
                     <td>{{ score }}</td>
-                    <td>{{ session.risk_scores_weighted[dimension] }}</td>
+                    <td>{{ risk_scores_weighted[dimension] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
             <tr>
                 <th>Total</th>
-                <th>{{ totals[0] }}</th>
-                <th>{{ totals[1] }}</th>
+                <!-- Apply classes to the footer cells -->
+                <th class="total {{ total_normal_color_class }}">{{ totals[0] }}</th>
+                <th class="total {{ total_weighted_color_class }}">{{ totals[1] }}</th>
             </tr>
-        </tfoot>
+        </tfoot>        
+    </table>
+
+    <!-- Risk Scale Table -->
+    <h2>Risk Scale</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Scale</th>
+                <th>Range</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="very-low">
+                <td>Very Low</td>
+                <td>0-30</td>
+            </tr>
+            <tr class="low">
+                <td>Low</td>
+                <td>30-60</td>
+            </tr>
+            <tr class="medium">
+                <td>Medium</td>
+                <td>60-90</td>
+            </tr>
+            <tr class="high">
+                <td>High</td>
+                <td>90-120</td>
+            </tr>
+            <tr class="very-high">
+                <td>Very High</td>
+                <td>120-150</td>
+            </tr>
+            <tr class="death">
+                <td>Death</td>
+                <td>150+</td>
+            </tr>
+        </tbody>
     </table>
 
     <!-- User Responses Section -->

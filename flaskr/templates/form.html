@@ -20,8 +20,11 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        <br>
         <p>{{ form.extra_sec() }} {{ form.extra_sec.label }}</p>
+        <br>
         <p>{{ form.two_factor() }} {{ form.two_factor.label }}</p>
+        <br>
         <p>
             {{ form.sign_in_method.label }}<br>
             {{ form.sign_in_method }}<br>

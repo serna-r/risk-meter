@@ -1,153 +1,144 @@
-h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
-}
-
-#main-div {
-    margin: 25px 50px 75px 100px;
+/* Reset Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 /* General Page Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     background-color: #f4f4f9;
     color: #333;
 }
 
-h1, h2 {
-    color: #333;
-    text-align: center;
-    margin-top: 20px;
+.container {
+    display: flex;
+    min-height: 100vh;
 }
 
+/* Left Navigation Bar Styles */
+.navbar {
+    width: 200px;
+    background-color: #f7f7f9;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.navbar-links {
+    list-style-type: none;
+}
+
+.navbar-links li {
+    margin-bottom: 15px;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: #444;
+    font-weight: 500;
+    padding: 8px;
+    display: block;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* Main Content Styles */
+#main-div {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin: 20px;
+    max-width: 1000px;
+}
+
+/* Headings */
 h1 {
     font-size: 2em;
+    text-align: center;
+    padding: 10px;
     margin-bottom: 10px;
+    color: #555;
+    background-color: #fdfdfd;
+    border: 2px solid #ddd;
+    border-radius: 8px;
 }
 
 h2 {
     font-size: 1.5em;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Table Styles */
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #4CAF50;
-    color: white;
+    color: #444;
     text-align: center;
+    margin: 20px 0 10px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    display: inline-block;
 }
 
-td {
-    color: #555;
-}
-
-tfoot {
-    font-weight: bold;
-    background-color: #f9f9f9;
-}
-
-/* Highlighting rows for better readability */
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-/* Image Styles */
-.image {
-    display: block;
-    margin: 20px auto;
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Message Box for User Responses */
-#user-responses {
-    width: 80%;
-    margin: 20px auto;
-    padding: 15px;
-    background-color: #eef6ef;
-    border: 1px solid #d1e7dd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Form Container */
+/* Form Styles */
 form {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Headings within the form */
-form h2 {
-    font-size: 1.3em;
-    margin-top: 20px;
-    color: #333;
-    border-bottom: 2px solid #4CAF50;
-    padding-bottom: 5px;
-}
-
-/* Form Labels */
 form p label {
     font-weight: bold;
     color: #555;
-    display: inline-block;
     margin-bottom: 5px;
 }
 
-/* Input Fields */
 input[type="text"],
 input[type="number"],
 input[type="password"],
 select {
     width: calc(100% - 12px);
     padding: 10px;
-    margin: 5px 0 15px 0;
+    margin: 5px 0 15px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+    border-radius: 6px;
     font-size: 1em;
     color: #333;
 }
 
-input[type="checkbox"] {
-    margin-right: 5px;
-    vertical-align: middle;
+/* Checkbox and Radio Styles */
+.checkbox-group,
+.radio-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 15px;
 }
 
-/* Error Messages */
-span[style*="color: red;"] {
-    color: #e74c3c; /* Adjusted red color for better contrast */
-    font-size: 0.9em;
-    font-style: italic;
+.checkbox-group label,
+.radio-group label {
+    font-weight: normal;
+    color: #333;
+}
+
+.checkbox-group input[type="checkbox"],
+.radio-group input[type="radio"] {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
 /* Submit Button */
@@ -156,7 +147,7 @@ input[type="submit"] {
     color: white;
     padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
     width: 100%;
@@ -167,92 +158,103 @@ input[type="submit"]:hover {
     background-color: #45a049;
 }
 
-/* Checkbox & Radio Field Wrappers */
-p {
-    margin-bottom: 15px;
-    line-height: 1.5;
+/* Table Styles */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-p label {
-    font-weight: normal;
-    color: #333;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-/* Enhancements for Error Display */
-form p {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-/* Checkbox and Radio Button Alignment */
-.checkbox-group, .radio-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.checkbox-group label, .radio-group label {
-    font-weight: normal;
-    color: #333;
-    margin: 0;
-}
-
-.checkbox-group input[type="checkbox"], 
-.radio-group input[type="radio"] {
-    margin: 0;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-/* Checkbox and Radio Field Wrappers for Single Lines */
-.single-checkbox, .single-radio {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.single-checkbox label, .single-radio label {
-    margin: 0;
-}
-
-/* Apply this style to form checkboxes and radios */
-p.single-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Adjust margin of checkbox and radio labels */
-p label {
-    font-weight: bold;
+th {
+    background-color: #eee;
     color: #555;
-    display: inline-block;
-    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-/* Responsive Design for Mobile */
+tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+tfoot tr {
+    font-weight: bold;
+}
+
+tfoot tr td,
+tfoot tr th {
+    border-top: 1px solid #ddd;
+}
+
+ /* Risk Scale Colors */
+ tr.very-low { background-color: #a8e6a3; }
+ tr.low { background-color: #d0f0c0; }
+ tr.medium { background-color: #fff4a3; }
+ tr.high { background-color: #f7b4a3; }
+ tr.very-high { background-color: #ff8989; }
+ tr.death { background-color: #000000; color: white; }
+
+ /* Styling the footer cells to have background colors as well */
+ tfoot th.total {
+     padding: 10px;
+ }
+
+ /* If needed, you can add custom colors for the footer */
+ .total.very-low { background-color: #a8e6a3; }
+ .total.low { background-color: #d0f0c0; }
+ .total.medium { background-color: #fff4a3; }
+ .total.high { background-color: #f7b4a3; }
+ .total.very-high { background-color: #ff8989; }
+ .total.death { background-color: #000000; color: white; }
+
+/* Image Styling */
+.image {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Error Messages */
+span[style*="color: red;"] {
+    color: #e74c3c;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    form {
+    .container {
+        flex-direction: column;
+    }
+
+    .navbar {
         width: 100%;
-        padding: 15px;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #main-div {
+        margin: 10px auto;
+        width: 100%;
     }
 
     input[type="submit"] {
         width: 100%;
     }
-}
 
-
-/* Making sure larger images scale down for smaller screens */
-@media (max-width: 768px) {
-    table {
-        width: 100%;
-    }
+    table,
     .image {
         width: 100%;
     }
