@@ -18,4 +18,4 @@ build/
 notes.txt
 
 # Ignore generated images
-/generated
+generated/
