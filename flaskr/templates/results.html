@@ -21,41 +21,45 @@
     </div>
 </div>
 
-<h2>User Responses</h2>
-<table border="1">
+<h2>Risk assesment</h2>
+<table>
     <thead>
         <tr>
-            <th>Field</th>
-            <th>Response</th>
+            <th>Module</th>
+            <th>Value</th>
+            <th>Weighted for this module</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><strong>Minimum Length</strong></td>
-            <td>{{ session.min_length }}</td>
+            <td><strong>Risk of data exposure</strong></td>
+            <td>{{ totals[0] }}</td>>
+            <td>{{ totals[0] }}</td>>
         </tr>
         <tr>
-            <td><strong>Minimum Mask</strong></td>
-            <td>{{ session.min_mask }}</td>
+            <td><strong>Service authentication practices</strong></td>
+            <td>{{ session.NIST_compliance_score | round(2) }}</td>>
+            <td>{{ totals[0] / session.NIST_compliance_score | round(2)  }}</td>>
         </tr>
         <tr>
-            <td><strong>Extra Security</strong></td>
-            <td>{{ 'Implemented' if session.extra_sec else 'Not implemented' }}</td>
+            <td><strong>User’s risk appetite</strong></td>
+            <td>{{ session.risk_appetite }}</td>>
+            <td>{{ totals[1] }}</td>>
         </tr>
+    </tbody>
+    <tfoot>
         <tr>
-            <td><strong>Two Factor Authentication</strong></td>
-            <td>{{ 'Available' if session.two_factor else 'Not available' }}</td>
-        </tr>
-        <tr>
-            <td><strong>Risk of Data Exposure</strong></td>
-            <td>{{ session.risk_data_exp | join(', ') }}</td>
+            <th>Weighted risk</th>
+            <th class="total {{ total_weighted_color_class }}">{{ totals[1] / session.NIST_compliance_score}}</th>
         </tr>
         <tr>
             <td><strong>Password Score</strong></td>
-            <td id="passwordScore"></td> <!-- New score row -->
+            <td id="passwordScore"></td>
         </tr>
-    </tbody>
+    </tfoot>
 </table>
+<p><a href="#user-responses">User responses</a></p>
+<p><a href="#risk-scores">Risk scores by dimensions</a></p>
 
 <h2>Password Security Information</h2>
 
@@ -149,6 +153,43 @@
     </tfoot>
 </table>
 <p><a href="#risk-scale">See Risk Scale Table</a></p>
+
+<!-- User responses-->
+<h2 id="user-responses">User Responses</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Minimum Length</strong></td>
+            <td>{{ session.min_length }}</td>
+        </tr>
+        <tr>
+            <td><strong>Minimum Mask</strong></td>
+            <td>{{ session.min_mask }}</td>
+        </tr>
+        <tr>
+            <td><strong>Extra Security</strong></td>
+            <td>{{ 'Implemented' if session.extra_sec else 'Not implemented' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Two Factor Authentication</strong></td>
+            <td>{{ 'Available' if session.two_factor else 'Not available' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Risk of Data Exposure</strong></td>
+            <td>{{ session.risk_data_exp | join(', ') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Password Score</strong></td>
+            <td id="passwordScore"></td>
+        </tr>
+    </tbody>
+</table>
 
 <!-- Risk Scale Table -->
 <h2 id="risk-scale">Risk Scale</h2>

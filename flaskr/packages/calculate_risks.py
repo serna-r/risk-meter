@@ -92,6 +92,28 @@ def get_risk_color_class(score):
         return "very-high"
     else:
         return "death"
+    
+# Evaluate based on nist policies
+def evaluate_compliance(min_length, min_mask, extra_sec):
+    """Function to evaluate compliance for a single service"""
+    compliance = 0
+    max_compliance = 3  # Total number of policies
+    
+    # Policy 1: Blocklist Requirement
+    if extra_sec == 1:
+        compliance += 1
+    
+    # Policy 2: Minimum Length
+    compliance += min_length - 7
+    
+    # Policy 3: No Composition Rules
+    if min_mask.lower() == 'l':  # l means no composition rules required
+        compliance += 1
+    
+    # Calculate compliance score
+    compliance_score = compliance / max_compliance
+    return compliance_score
+
 
 def example():
     # Example usage

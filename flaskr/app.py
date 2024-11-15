@@ -1,8 +1,8 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, send_from_directory
+from flask import Flask, render_template, flash, redirect, url_for, session
 from form import RiskForm
 from config import Config
-from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions, get_risk_color_class
-import os
+from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions, get_risk_color_class, evaluate_compliance
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,8 +20,10 @@ def form():
         session['min_length'] = form.min_length.data
         session['min_mask'] = form.min_mask.data
         session['extra_sec'] = form.extra_sec.data
+        session['NIST_compliance_score'] = evaluate_compliance(form.min_length.data, form.min_mask.data, form.extra_sec.data)
         session['two_factor'] = form.two_factor.data
         session['risk_data_exp'] = form.risk_data_exp.data
+        session['risk_appetite'] = int(form.risk_appetite.data[0])
 
         # Calculate the risk scores based on the selected elements
         risk_scores, risk_scores_weighted = calculate_risk(form.risk_data_exp.data, int(form.risk_appetite.data[0]))
