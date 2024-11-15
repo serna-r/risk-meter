@@ -1,7 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, send_from_directory
 from form import RiskForm
 from config import Config
-from packages.password_strength import calculate_strength
 from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions, get_risk_color_class
 import os
 
@@ -24,11 +23,6 @@ def form():
         session['two_factor'] = form.two_factor.data
         session['risk_data_exp'] = form.risk_data_exp.data
 
-        # Get zxcvbn
-        password_strength = calculate_strength(form.password.data)
-        password_strength['calc_time'] = str(password_strength['calc_time'])  # Convert timedelta to string
-        session['password_strength'] = password_strength
-        
         # Calculate the risk scores based on the selected elements
         risk_scores, risk_scores_weighted = calculate_risk(form.risk_data_exp.data, int(form.risk_appetite.data[0]))
         
@@ -39,11 +33,6 @@ def form():
         session['risk_scores'] = risk_scores
         session['risk_scores_weighted'] = risk_scores_weighted
         session['plot_filename'] = plot_filename
-
-        
-        # Display flash message for other form details
-        flash('Min length {}, Min mask {}, Extra sec {}, Risk of data exposure {}, Password strength {}'.format(
-            form.min_length.data, form.min_mask.data, form.extra_sec.data, form.risk_data_exp.data, calculate_strength(form.password.data)))
         
         return redirect(url_for('results'))
     return render_template('form.html', title='Form', form=form)

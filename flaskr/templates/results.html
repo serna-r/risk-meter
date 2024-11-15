@@ -1,204 +1,194 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Results {% endblock %}</h1>
-    
-    <!-- Image container for side-by-side display -->
-    <div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start;">
-        <div style="text-align: center;">
-            <h2>Risk of Data Exposure</h2>
-            <br>
-            <a href="#risk-scores">Scores table</a>
-            {% if session.plot_filename %}
-                <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" width="100%" height="auto" alt="Radar Plot">
-            {% else %}
-                <p>No plot available.</p>
-            {% endif %}
-        </div>
+<h1>{% block title %} Results {% endblock %}</h1>
 
-        <div style="text-align: center;">
-            <h2>Radar plots for common service categories</h2>
-            <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" width="70%" height="auto" alt="Comparison Radar Plot">
-        </div>
+<div style="display: flex; gap: 20px; justify-content: center; align-items: flex-start;">
+    <div style="text-align: center;">
+        <h2>Risk of Data Exposure</h2>
+        <br>
+        <a href="#risk-scores">Scores table</a>
+        {% if session.plot_filename %}
+            <img src="{{ url_for('static', filename='images/generated/' + session.plot_filename) }}" width="100%" height="auto" alt="Radar Plot">
+        {% else %}
+            <p>No plot available.</p>
+        {% endif %}
     </div>
 
-    <!-- User Responses Section -->
-    <h2>User Responses</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Response</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Minimum Length</strong></td>
-                <td>{{ session.min_length }}</td>
-            </tr>
-            <tr>
-                <td><strong>Minimum Mask</strong></td>
-                <td>{{ session.min_mask }}</td>
-            </tr>
-            <tr>
-                <td><strong>Extra Security</strong></td>
-                <td>{{ 'Implemented' if session.extra_sec else 'Not implemented' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Two Factor Authentication</strong></td>
-                <td>{{ 'Available' if session.two_factor else 'Not available' }}</td>
-            </tr>
-            <tr>
-                <td><strong>Risk of Data Exposure</strong></td>
-                <td>{{ session.risk_data_exp | join(', ') }}</td>
-            </tr>
-            <tr>
-                <td><strong>Password Strength Score</strong></td>
-                <td>{{ session.password_strength['score'] }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="text-align: center;">
+        <h2>Radar plots for common service categories</h2>
+        <img src="{{ url_for('static', filename='images/radar_services_risk.png') }}" width="70%" height="auto" alt="Comparison Radar Plot">
+    </div>
+</div>
 
-    <!-- Password Security Information -->
-    <h2>Password Security Information</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Field</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Password</strong></td>
-                <td>{{ session.password_strength['password'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Total Guesses</strong></td>
-                <td>{{ session.password_strength['guesses'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Guess Complexity (log10)</strong></td>
-                <td>{{ session.password_strength['guesses_log10'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Online Crack Time (100 attempts/hour)</strong></td>
-                <td>{{ session.password_strength['crack_times_display']['online_throttling_100_per_hour'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Offline Crack Time (10^4 attempts/second)</strong></td>
-                <td>{{ session.password_strength['crack_times_display']['offline_slow_hashing_1e4_per_second'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Offline Crack Time (10^10 attempts/second)</strong></td>
-                <td>{{ session.password_strength['crack_times_display']['offline_fast_hashing_1e10_per_second'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Feedback Warning</strong></td>
-                <td>{{ session.password_strength['feedback']['warning'] }}</td>
-            </tr>
-            <tr>
-                <td><strong>Suggestions</strong></td>
-                <td>{{ session.password_strength['feedback']['suggestions'] | join(', ') }}</td>
-            </tr>
-        </tbody>
-    </table>
+<h2>User Responses</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Minimum Length</strong></td>
+            <td>{{ session.min_length }}</td>
+        </tr>
+        <tr>
+            <td><strong>Minimum Mask</strong></td>
+            <td>{{ session.min_mask }}</td>
+        </tr>
+        <tr>
+            <td><strong>Extra Security</strong></td>
+            <td>{{ 'Implemented' if session.extra_sec else 'Not implemented' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Two Factor Authentication</strong></td>
+            <td>{{ 'Available' if session.two_factor else 'Not available' }}</td>
+        </tr>
+        <tr>
+            <td><strong>Risk of Data Exposure</strong></td>
+            <td>{{ session.risk_data_exp | join(', ') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Password Score</strong></td>
+            <td id="passwordScore"></td> <!-- New score row -->
+        </tr>
+    </tbody>
+</table>
 
-    <!-- Detailed Breakdown of Password Components -->
-    <h2>Password Component Analysis</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Pattern</th>
-                <th>Token</th>
-                <th>Pattern Details</th>
-                <th>Guesses</th>
-                <th>Guess Complexity (log10)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for component in session.password_strength['sequence'] %}
-                <tr>
-                    <td><strong>{{ component['pattern'] }}</strong></td>
-                    <td>{{ component['token'] }}</td>
-                    <td>
-                        {% if component['pattern'] == 'spatial' %}
-                            Graph: {{ component['graph'] }}, Turns: {{ component['turns'] }}, Shifted Count: {{ component['shifted_count'] }}
-                        {% elif component['pattern'] == 'dictionary' %}
-                            Dictionary: {{ component['dictionary_name'] }}, Word: {{ component['matched_word'] }}, Rank: {{ component['rank'] }}
-                        {% endif %}
-                    </td>
-                    <td>{{ component['guesses'] }}</td>
-                    <td>{{ component['guesses_log10'] }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<h2>Password Security Information</h2>
 
-    <!-- Risk Scores Table -->
-    <h2 id="risk-scores">Risk Scores by Dimension:</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Dimension</th>
-                <th>Normal Score</th>
-                <th>Weighted Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for dimension, score in risk_scores.items() %}
-                <tr>
-                    <td><strong>{{ dimension }}</strong></td>
-                    <td>{{ score }}</td>
-                    <td>{{ risk_scores_weighted[dimension] }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Total</th>
-                <th class="total {{ total_normal_color_class }}">{{ totals[0] }}</th>
-                <th class="total {{ total_weighted_color_class }}">{{ totals[1] }}</th>
-            </tr>
-        </tfoot>
-    </table>
-    <p><a href="#risk-scale">See Risk Scale Table</a></p>
+<label for="password">Enter Password:</label>
+<input type="text" id="password" oninput="evaluatePassword()" placeholder="Type your password here">
 
-    <!-- Risk Scale Table -->
-    <h2 id="risk-scale">Risk Scale</h2>
-    <table border="1">
-        <thead>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Password</strong></td>
+            <td id="passwordField"></td>
+        </tr>
+        <tr>
+            <td><strong>Total Guesses</strong></td>
+            <td id="guesses"></td>
+        </tr>
+        <tr>
+            <td><strong>Guess Complexity (log10)</strong></td>
+            <td id="guessesLog10"></td>
+        </tr>
+        <tr>
+            <td><strong>Online Crack Time (100 attempts/hour)</strong></td>
+            <td id="onlineCrackTime"></td>
+        </tr>
+        <tr>
+            <td><strong>Offline Crack Time (10^4 attempts/second)</strong></td>
+            <td id="offlineSlowCrackTime"></td>
+        </tr>
+        <tr>
+            <td><strong>Offline Crack Time (10^10 attempts/second)</strong></td>
+            <td id="offlineFastCrackTime"></td>
+        </tr>
+        <tr>
+            <td><strong>Feedback Warning</strong></td>
+            <td id="feedbackWarning"></td>
+        </tr>
+        <tr>
+            <td><strong>Suggestions</strong></td>
+            <td id="suggestions"></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Password Component Analysis</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Pattern</th>
+            <th>Token</th>
+            <th>Pattern Details</th>
+            <th>Guesses</th>
+            <th>Guess Complexity (log10)</th>
+        </tr>
+    </thead>
+    <tbody id="componentAnalysis">
+        <!-- Dynamic rows will be inserted here -->
+    </tbody>
+</table>
+
+<!-- Risk Scores Table -->
+<h2 id="risk-scores">Risk Scores by Dimension:</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Dimension</th>
+            <th>Normal Score</th>
+            <th>Weighted Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dimension, score in risk_scores.items() %}
             <tr>
-                <th>Scale</th>
-                <th>Range</th>
+                <td><strong>{{ dimension }}</strong></td>
+                <td>{{ score }}</td>
+                <td>{{ risk_scores_weighted[dimension] }}</td>
             </tr>
-        </thead>
-        <tbody>
-            <tr class="very-low">
-                <td>Very Low</td>
-                <td>0-30</td>
-            </tr>
-            <tr class="low">
-                <td>Low</td>
-                <td>30-60</td>
-            </tr>
-            <tr class="medium">
-                <td>Medium</td>
-                <td>60-90</td>
-            </tr>
-            <tr class="high">
-                <td>High</td>
-                <td>90-120</td>
-            </tr>
-            <tr class="very-high">
-                <td>Very High</td>
-                <td>120-150</td>
-            </tr>
-            <tr class="death">
-                <td>Death</td>
-                <td>150+</td>
-            </tr>
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Total</th>
+            <th class="total {{ total_normal_color_class }}">{{ totals[0] }}</th>
+            <th class="total {{ total_weighted_color_class }}">{{ totals[1] }}</th>
+        </tr>
+    </tfoot>
+</table>
+<p><a href="#risk-scale">See Risk Scale Table</a></p>
+
+<!-- Risk Scale Table -->
+<h2 id="risk-scale">Risk Scale</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Scale</th>
+            <th>Range</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="very-low">
+            <td>Very Low</td>
+            <td>0-30</td>
+        </tr>
+        <tr class="low">
+            <td>Low</td>
+            <td>30-60</td>
+        </tr>
+        <tr class="medium">
+            <td>Medium</td>
+            <td>60-90</td>
+        </tr>
+        <tr class="high">
+            <td>High</td>
+            <td>90-120</td>
+        </tr>
+        <tr class="very-high">
+            <td>Very High</td>
+            <td>120-150</td>
+        </tr>
+        <tr class="death">
+            <td>Death</td>
+            <td>150+</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Include JavaScript files -->
+<script src="{{ url_for('static', filename='js/zxcvbn.js') }}"></script>
+<script src="{{ url_for('static', filename='js/passwordStrengthChecker.js') }}" defer></script>
 
 {% endblock %}

@@ -27,8 +27,5 @@ class RiskForm(FlaskForm):
     # Risk appetite
     risk_appetite = SelectField('Risk appetite', choices=[(x,x) for x in JSON_CHOICES["risk_appetite"]],validators=[DataRequired(), NoneOf(["Choose one"], message="You have to choose one")])
 
-    # Password
-    password = PasswordField('Password', validators=[DataRequired()])
-
     # Submit
     submit = SubmitField('Submit')
