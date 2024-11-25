@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session
+from flask import Flask, render_template, redirect, url_for, session
 from form import RiskForm
 from config import Config
 from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions, get_risk_color_class, evaluate_compliance
@@ -6,7 +6,6 @@ from packages.calculate_risks import calculate_risk, plot_radar_risk_dimensions,
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.secret_key = 'your_secret_key'  # Ensure you have a secret key for session management
 
 @app.route('/')
 def index():
